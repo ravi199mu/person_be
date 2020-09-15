@@ -18,7 +18,7 @@ import in.ecgc.erp.model.Person;
 import in.ecgc.erp.service.PersonService;
 
 @RestController
-@RequestMapping("/persons/")
+@RequestMapping("/persons")
 public class PersonController {
 	
 	@Autowired
@@ -50,12 +50,12 @@ public class PersonController {
 		return ResponseEntity.ok(personService.getAllPersons());
 	}
 	
-	@GetMapping(value="/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/get/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> getPersonDetailsUsingId(@PathVariable Integer id){
 		return ResponseEntity.ok(personService.getPersonById(id));
 	}
 	
-	@DeleteMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/delete/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Person>> deletePersonById(@PathVariable Integer id){
 		String removePerson = personService.removePerson(id);
 		if(removePerson!=null) {
