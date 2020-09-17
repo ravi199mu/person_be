@@ -2,6 +2,8 @@ package in.ecgc.erp.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import in.ecgc.erp.model.Person;
 
 public interface PersonService {
@@ -16,4 +18,8 @@ public interface PersonService {
 	Integer modifyPerson(Person person);
 	
 	String removePerson(Integer id);
+	
+	String uploadResume(MultipartFile file, Integer personId);
+
+	String downloadResume(Integer id);
 }

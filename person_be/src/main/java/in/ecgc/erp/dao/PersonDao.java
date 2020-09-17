@@ -2,6 +2,8 @@ package in.ecgc.erp.dao;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import in.ecgc.erp.model.Person;
 
 public interface PersonDao {
@@ -15,4 +17,8 @@ public interface PersonDao {
 	Integer updatePerson(Person person);
 	
 	String deletePerson(Integer id);
+	
+	String uploadResume(MultipartFile file, Integer personId);
+	
+	String downloadResume(Integer id);
 }

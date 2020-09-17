@@ -1,6 +1,10 @@
 package in.ecgc.erp.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Types;
 import java.util.List;
+import java.util.Random;
 
 import javax.sql.DataSource;
 
@@ -8,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import in.ecgc.erp.model.Person;
 import in.ecgc.erp.model.PersonRowMapper;
@@ -27,7 +34,7 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public Integer insertPerson(Person person) {
-		String sql = "insert into person (name,email,domain) values(:name,:email,:domain)";
+		String sql = "insert into person(name,email,domain) values(:name,:email,:domain)";
 		MapSqlParameterSource pSource = new MapSqlParameterSource();
 		pSource.addValue("name", person.getName());
 		pSource.addValue("email", person.getEmail());
@@ -79,6 +86,37 @@ public class PersonDaoImpl implements PersonDao {
 		if (result > 0) {
 			return "Person with id : "+id+" deleted successfully";
 		}
+		return null;
+	}
+
+	@Override
+	public String uploadResume(MultipartFile file, Integer personId) {
+		
+		//generate fileid
+		
+		String fileId = "file"+new Random().nextInt(1000);
+		
+		String sql = "update person set resume=:resume, fileid=:fileid where id=:id";
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		try {
+			map.addValue("resume",  new SqlLobValue(new ByteArrayInputStream(file.getBytes()), 
+					   file.getBytes().length, new DefaultLobHandler()), Types.BLOB);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		map.addValue("fileid", fileId);
+		map.addValue("id", personId);
+		
+		int result= namedJdbc.update(sql, map);
+		if(result > 0) {
+			return "uploaded";
+		}
+		return "failed";
+	}
+
+	@Override
+	public String downloadResume(Integer id) {
+		
 		return null;
 	}
 

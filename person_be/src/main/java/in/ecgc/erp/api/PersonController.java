@@ -3,8 +3,10 @@ package in.ecgc.erp.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import in.ecgc.erp.model.Person;
 import in.ecgc.erp.service.PersonService;
@@ -64,5 +69,22 @@ public class PersonController {
 		return (ResponseEntity<List<Person>>) ResponseEntity.notFound();
 	}
 	
+	@PostMapping(value = "/upload")
+	public ResponseEntity<String> uploadResume(@RequestParam MultipartFile file,@RequestParam("personId") Integer id){
+		String uploadStatus = personService.uploadResume(file, id);
+		if(uploadStatus.equals("uploaded")) {
+			return (ResponseEntity<String>) ResponseEntity.ok("success");
+		}
+		
+		return (ResponseEntity<String>) ResponseEntity.ok("failed");
+	}
 	
+	
+	@GetMapping(value = "/download/{personId}")
+	public ResponseEntity<String> downloadResume(@PathVariable("personId") Integer id){
+		String downloadStatus = personService.downloadResume(id);
+		
+		
+		return (ResponseEntity<String>) ResponseEntity.ok("failed");
+	}
 }
