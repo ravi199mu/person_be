@@ -46,7 +46,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public String downloadResume(Integer id) {
+	public Person downloadResume(Integer id) {
 		return dao.downloadResume(id);
 	}
 

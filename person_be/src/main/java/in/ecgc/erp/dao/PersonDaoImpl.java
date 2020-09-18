@@ -115,9 +115,11 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public String downloadResume(Integer id) {
+	public Person downloadResume(Integer id) {
+		String sql = "select * from person where id=:id";
 		
-		return null;
+		Person person = namedJdbc.queryForObject(sql, new MapSqlParameterSource("id",id), new PersonRowMapper());
+		return person;
 	}
 
 }

@@ -80,11 +80,15 @@ public class PersonController {
 	}
 	
 	
-	@GetMapping(value = "/download/{personId}")
-	public ResponseEntity<String> downloadResume(@PathVariable("personId") Integer id){
-		String downloadStatus = personService.downloadResume(id);
+	@GetMapping(value = "/download/{id}")
+	public ResponseEntity<Person> downloadResume(@RequestParam("personId") Integer id){
+		Person person = personService.downloadResume(id);
 		
+		System.out.println(person.getResume().getOriginalFilename());
 		
-		return (ResponseEntity<String>) ResponseEntity.ok("failed");
+		if(person != null) {
+			return ResponseEntity.ok(person);
+		}
+		return (ResponseEntity<Person>) ResponseEntity.notFound();
 	}
 }

@@ -20,5 +20,5 @@ public interface PersonDao {
 	
 	String uploadResume(MultipartFile file, Integer personId);
 	
-	String downloadResume(Integer id);
+	Person downloadResume(Integer id);
 }

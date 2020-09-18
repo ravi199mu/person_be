@@ -21,5 +21,5 @@ public interface PersonService {
 	
 	String uploadResume(MultipartFile file, Integer personId);
 
-	String downloadResume(Integer id);
+	Person downloadResume(Integer id);
 }
