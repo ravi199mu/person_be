@@ -16,11 +16,10 @@ public class PersonRowMapper implements RowMapper<Person> {
 		p.setEmail(rs.getString("email"));
 		p.setDomain(rs.getString("domain"));
 		p.setFileId(rs.getString("fileid"));
-//		FileItem fileItem = new DiskFileItem("fileData", "application/pdf",true, outputFile.getName(), 100000000, new java.io.File(System.getProperty("java.io.tmpdir")));              
-//		MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
 		
-		p.setResume((MultipartFile)rs.getBlob("resume"));
-		
+		p.setFileName(rs.getString("filename"));
+		p.setFileType(rs.getString("filetype"));
+		p.setResume(rs.getBytes("resume"));
 		return p;
 	}
 

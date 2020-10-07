@@ -41,8 +41,8 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public String uploadResume(MultipartFile file, Integer personId) {
-		return dao.uploadResume(file, personId);
+	public String uploadResume(byte[] file,String ft,String fn,Integer personId) {
+		return dao.uploadResume(file, ft, fn, personId);
 	}
 
 	@Override

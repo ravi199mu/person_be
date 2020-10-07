@@ -3,7 +3,10 @@ package in.ecgc.erp.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,8 +74,9 @@ public class PersonController {
 	}
 	
 	@PostMapping(value = "/upload")
-	public ResponseEntity<String> uploadResume(@RequestParam MultipartFile file,@RequestParam("personId") Integer id){
-		String uploadStatus = personService.uploadResume(file, id);
+	public ResponseEntity<String> uploadResume(@RequestPart("fileData") byte[] resume,@RequestPart("filetype") String fileType,
+			@RequestPart("filename") String fileName,@RequestPart("personId") Integer id){
+		String uploadStatus = personService.uploadResume(resume,fileType,fileName,id);
 		if(uploadStatus.equals("uploaded")) {
 			return (ResponseEntity<String>) ResponseEntity.ok("success");
 		}
@@ -80,15 +85,18 @@ public class PersonController {
 	}
 	
 	
-	@GetMapping(value = "/download/{id}")
-	public ResponseEntity<Person> downloadResume(@RequestParam("personId") Integer id){
+	@PostMapping(value = "/download")
+	public ResponseEntity<Resource> downloadResume(@RequestPart("id") Integer id){
+	
+		System.out.println("in be controller");
 		Person person = personService.downloadResume(id);
 		
-		System.out.println(person.getResume().getOriginalFilename());
-		
 		if(person != null) {
-			return ResponseEntity.ok(person);
+			return ResponseEntity.ok()
+					.contentType(MediaType.parseMediaType(person.getFileType()))
+					.header(HttpHeaders.CONTENT_DISPOSITION	, "attachment; filename="+person.getFileName())
+					.body(new ByteArrayResource(person.getResume()));
 		}
-		return (ResponseEntity<Person>) ResponseEntity.notFound();
+		return (ResponseEntity<Resource>) ResponseEntity.notFound();
 	}
 }

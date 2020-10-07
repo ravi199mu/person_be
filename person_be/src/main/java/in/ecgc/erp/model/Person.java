@@ -1,8 +1,9 @@
 package in.ecgc.erp.model;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.util.Arrays;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 public class Person {
 
@@ -11,23 +12,16 @@ public class Person {
 	private String email;
 	private String domain;
 
-	@JsonIgnore
-	private MultipartFile resume;
+//	@JsonIgnore
+//	private MultipartFile resume;
 
 	private String fileId;
+	private String fileName;
+	private String fileType;
+	private byte[] resume;
 
 	public Person() {
 
-	}
-
-	public Person(Integer id, String name, String email, String domain, MultipartFile resume, String fileId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.domain = domain;
-		this.resume = resume;
-		this.fileId = fileId;
 	}
 
 	public Integer getId() {
@@ -62,14 +56,6 @@ public class Person {
 		this.domain = domain;
 	}
 
-	public MultipartFile getResume() {
-		return resume;
-	}
-
-	public void setResume(MultipartFile resume) {
-		this.resume = resume;
-	}
-
 	public String getFileId() {
 		return fileId;
 	}
@@ -78,10 +64,36 @@ public class Person {
 		this.fileId = fileId;
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public byte[] getResume() {
+		return resume;
+	}
+
+	public void setResume(byte[] resume) {
+		this.resume = resume;
+	}
+
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", name=" + name + ", email=" + email + ", domain=" + domain + ", resume=" + resume
-				+ ", fileId=" + fileId + "]";
+		return "Person [id=" + id + ", name=" + name + ", email=" + email + ", domain=" + domain + ", fileId=" + fileId
+				+ ", fileName=" + fileName + ", fileType=" + fileType + ", resume=" + Arrays.toString(resume) + "]";
 	}
+	
+	 
 
 }

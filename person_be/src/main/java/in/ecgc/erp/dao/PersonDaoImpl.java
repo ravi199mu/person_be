@@ -90,21 +90,18 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public String uploadResume(MultipartFile file, Integer personId) {
-		
-		//generate fileid
+	public String uploadResume(byte[] resume,String ft,String fn,Integer personId) {
 		
 		String fileId = "file"+new Random().nextInt(1000);
+	
 		
-		String sql = "update person set resume=:resume, fileid=:fileid where id=:id";
+		String sql = "update person set resume=:resume,fileid=:fileid,filename=:filename,filetype=:filetype where id=:id";
 		MapSqlParameterSource map = new MapSqlParameterSource();
-		try {
-			map.addValue("resume",  new SqlLobValue(new ByteArrayInputStream(file.getBytes()), 
-					   file.getBytes().length, new DefaultLobHandler()), Types.BLOB);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		map.addValue("resume",  new SqlLobValue(new ByteArrayInputStream(resume), 
+				   resume.length, new DefaultLobHandler()), Types.BLOB);
 		map.addValue("fileid", fileId);
+		map.addValue("filename", fn);
+		map.addValue("filetype", ft);
 		map.addValue("id", personId);
 		
 		int result= namedJdbc.update(sql, map);

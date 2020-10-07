@@ -19,7 +19,7 @@ public interface PersonService {
 	
 	String removePerson(Integer id);
 	
-	String uploadResume(MultipartFile file, Integer personId);
+	String uploadResume(byte[] file,String ft,String fn, Integer personId);
 
 	Person downloadResume(Integer id);
 }
